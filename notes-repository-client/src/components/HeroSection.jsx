@@ -1,11 +1,11 @@
 const HeroSection = () => {
   return (
-    <section className="max-w-7xl mx-auto text-center mt-20 px-6">
-      <h1 className="text-3xl font-bold text-gray-600">
+    <section className="max-w-7xl mx-auto text-center mt-20 px-6 pb-24 mb-20">
+      <h1 className="text-4xl font-bold text-gray-700">
         Notes Repository
       </h1>
 
-      <h2 className="text-1xl md:text-3xl font-semibold mt-6 text-gray-500">
+      <h2 className="text-2xl md:text-4xl font-semibold mt-6 text-gray-600">
         All Your College & School Notes
         <br />
         in One Place
@@ -16,7 +16,7 @@ const HeroSection = () => {
       </p>
 
       <div className="mt-8 flex justify-center gap-4">
-        <button className="bg-blue-600 text-white px-6 py-1 rounded-lg hover:bg-blue-700 transition">
+        <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
           Browse Notes
         </button>
 
