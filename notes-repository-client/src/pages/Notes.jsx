@@ -1,5 +1,12 @@
+import Navbar from "../components/navbar";
+
 
 function Notes(){
-    return <h1> Notes Page</h1>;
+    return (
+        <>
+            <Navbar />
+            <h1>Notes Page</h1>
+        </>
+    );
 }
 export default Notes;
