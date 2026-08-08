@@ -5,7 +5,7 @@ const HeroSection = () => {
         Notes Repository
       </h1>
 
-      <h2 className="text-2xl md:text-4xl font-semibold mt-5 text-gray-600">
+      <h2 className="text-2xl md:text-4xl font-semibold mt-2 text-gray-600">
         All Your College & School Notes
         <br />
         in One Place

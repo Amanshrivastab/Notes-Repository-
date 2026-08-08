@@ -1,8 +1,6 @@
 import NoteCard from "./noteCard";
 
-
-
-const LatestNotes = ({notes}) => {
+const LatestNotes = ({ notes }) => {
   return (
     <section className="max-w-6xl mx-auto px-5 py-7">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
@@ -13,6 +11,7 @@ const LatestNotes = ({notes}) => {
         {notes.map((note) => (
           <NoteCard
             key={note.id}
+            id={note.id}
             title={note.title}
             subject={note.subject}
             standard={note.standard}
