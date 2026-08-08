@@ -53,7 +53,7 @@ const Home = () => {
       {filteredNotes.length > 0 ? (
         <LatestNotes notes={filteredNotes} />
       ) : (
-        <div className="no-results text-center px-2 py-2 text-red">
+        <div className="no-results text-center px-2 py-2 ">
           <h2>No notes found</h2>
           <p>Try a different search or filter.</p>
         </div>
