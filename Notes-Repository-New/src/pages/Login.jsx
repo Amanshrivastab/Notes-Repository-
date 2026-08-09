@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/navbar";
+import { Link } from "react-router-dom";
+
 
 function Login() {
   const [email , setEmail] =useState("");
@@ -111,12 +113,12 @@ function Login() {
           {/* Register */}
           <p className="text-center text-sm text-gray-600 mt-6">
             Don't have an account?{" "}
-            <a
-              href="#"
-              className="text-blue-600 font-medium hover:underline"
-            >
-              Register
-            </a>
+            <Link
+               to="/register" 
+              className="text-blue-600 font-medium hover:underline" 
+             >
+                  Register
+                   </Link>
           </p>
          
 
