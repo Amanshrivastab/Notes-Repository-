@@ -4,12 +4,38 @@ import Navbar from "../components/navbar";
 function Login() {
   const [email , setEmail] =useState("");
   const [password ,setPassword] =useState("");
+  const [error, setError] =useState({});
+
+
+  const validateForm  = ()=>{
+    const newError = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if(!email.trim()){
+      newError.email = "Email is required";
+    }else if (!emailRegex.test(email)) {
+       newError.email = "Please enter a valid email";
+      }
+
+    if(!password.trim()){
+      newError.password = "Password is required ";
+    }else if (password.length < 6) {
+        newError.password = "Password must be at least 6 characters";
+      }
+
+    setError(newError);
+
+    return Object.keys(newError).length === 0;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Email:", email);
-    console.log("Password:", password);
+    const isValid = validateForm();
+    if(!isValid){
+      return
+    }
+    console.log("form is valid ");
   };
 
   return (
@@ -45,6 +71,11 @@ function Login() {
                 onChange={(e)=>setEmail(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
               />
+               {error.email && (
+                 <p className="text-red-500 text-sm mt-1">
+                   {error.email}
+                   </p>
+                  )}
             </div>
 
             {/* Password */}
@@ -60,6 +91,11 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-gray-300 rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
               />
+              {error.password && (
+                 <p className="text-red-500 text-sm mt-1">
+                   {error.password}
+                   </p>
+                  )}
             </div>
 
             {/* Login Button */}
@@ -82,6 +118,7 @@ function Login() {
               Register
             </a>
           </p>
+         
 
         </div>
 
