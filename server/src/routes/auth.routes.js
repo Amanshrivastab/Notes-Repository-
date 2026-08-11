@@ -6,4 +6,5 @@ router.get("/test",(req,resp)=>{
         message:"auth route is working"
     });
 });
+
 module.exports = router;
