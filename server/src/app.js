@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 
 const Student = require("./models/Student");
 const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
 
 const app = express();
 
@@ -152,5 +153,6 @@ app.delete("/api/student/:id", async (req, resp) => {
 // ==================== AUTH ROUTES ====================
 
 app.use("/api/auth", authRoutes);
+app.use("/api",userRoutes);
 
 module.exports = app;
