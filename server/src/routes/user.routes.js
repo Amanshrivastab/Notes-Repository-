@@ -1,7 +1,7 @@
 const express = require("express");
 const authMiddleware = require("../middleware/auth.middleware");
 const adminMiddleware = require("../middleware/admin.middleware");
-const Note = require("../models/note");
+
 
 const router = express.Router();
 
@@ -18,21 +18,5 @@ router.get("/admin-test",authMiddleware,adminMiddleware,(req,res)=>{
     });
 });
 
-router.post( "/notes",authMiddleware,adminMiddleware,async (req, res) => {
-        try {
-            const newNote = await Note.create({
-                ...req.body,
-                uploadedBy: req.user.id
-            });
-
-            res.status(201).json(newNote);
-
-        } catch (error) {
-            res.status(500).json({
-                message: error.message
-            });
-        }
-    }
-);
 
 module.exports = router;
