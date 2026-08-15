@@ -5,6 +5,7 @@ const Note = require("../models/Note");
 
 const authMiddleware = require("../middleware/auth.middleware");
 const adminMiddleware = require("../middleware/admin.middleware");
+const upload = require("../middleware/upload.middleware");
 
 // ========================================
 // CREATE NOTE
@@ -151,6 +152,38 @@ router.delete(
             res.status(200).json({
                 message: "Note deleted successfully",
                 note: deletedNote
+            });
+
+        } catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    }
+);
+
+
+
+router.post(
+    "/multer",
+    authMiddleware,
+    adminMiddleware,
+    upload.single('pdf'),
+    async (req, res) => {
+        try {
+             console.log("================================");
+            console.log("BODY:");
+            console.log(req.body);
+
+            console.log("FILE:");
+            console.log(req.file);
+             console.log("================================");
+            res.status(200).json({
+                message: "Multer test successful",
+                body: req.body,
+                file: req.file,
+                fileReceived: !!req.file
+            
             });
 
         } catch (error) {
