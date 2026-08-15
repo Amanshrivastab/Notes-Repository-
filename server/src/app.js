@@ -7,6 +7,7 @@ const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const noteRoutes = require("./routes/note.routes");
 const studentRoutes = require("./routes/student.routes");
+const driveTestRoutes = require("./routes/driveTest.routes");
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api", userRoutes);
 app.use("/api", noteRoutes);
+app.use("/api/drive-test", driveTestRoutes);
 
 module.exports = app;
