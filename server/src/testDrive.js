@@ -2,7 +2,7 @@
 // Temporary standalone script — sirf yeh check karta hai ki
 // service account se Google Drive connect ho raha hai ya nahi.
 // Isse abhi CRUD API se koi lena dena nahi.
-
+{/*
 const { google } = require("googleapis");
 const path = require("path");
 
@@ -44,4 +44,41 @@ async function testConnection() {
   }
 }
 
-testConnection();
+testConnection();*/}
+
+
+require("dotenv").config({
+   path: "../.env"
+});
+
+const drive = require("./utils/googleDrive");
+
+async function testDrive() {
+    try {
+        const response = await drive.files.list({
+            pageSize: 10,
+            fields: "files(id, name, mimeType)"
+        });
+
+        console.log("OAuth Google Drive connected successfully!");
+
+        console.log("Files:");
+
+        response.data.files.forEach((file) => {
+            console.log(
+                `${file.name} | ${file.id} | ${file.mimeType}`
+            );
+        });
+
+    } catch (error) {
+        console.error("Google Drive OAuth Error:");
+
+        if (error.response) {
+            console.error(error.response.data);
+        } else {
+            console.error(error.message);
+        }
+    }
+}
+
+testDrive();
