@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 
@@ -6,6 +7,7 @@ const Note = require("../models/Note");
 const authMiddleware = require("../middleware/auth.middleware");
 const adminMiddleware = require("../middleware/admin.middleware");
 const upload = require("../middleware/upload.middleware");
+const {uploadFile } = require("../utils/googleDrive");
 
 // ========================================
 // CREATE NOTE
@@ -17,20 +19,68 @@ router.post(
     "/notes",
     authMiddleware,
     adminMiddleware,
+    upload.single("file"),
     async (req, res) => {
-        try {
-            const newNote = await Note.create({
-                ...req.body,
-                uploadedBy: req.user.id
-            });
+        try{
+            console.log("Body");
+            console.log(req.body);
 
-            res.status(201).json(newNote);
+            console.log("File");
+            console.log(req.file);
 
-        } catch (error) {
+            console.log("AUTH USER:");
+            console.log(req.user);
+
+            console.log("===============")
+            // check the file
+             if(!req.file){
+                 return res.status(400).json({
+                     message:"file is required"
+                 });
+             }
+
+             // upload file to google drive 
+             const driveFile = await uploadFile(req.file);
+
+             //create note in mongodb
+             const newNote = await Note.create({
+                title:req.body.title,
+
+                description:req.body.description,
+
+                subject:req.body.subject,
+
+                semester:req.body.semester,
+
+                branch:req.body.branch,
+
+                uploadedBy:req.user.user,
+
+                file:{
+                    driveFileId:driveFile.id,
+
+                    originalName:req.file.originalname,
+
+                    mimeType:req.file.mimetype,
+
+                    size:req.file.size
+                }
+             });
+
+             // send response 
+             res.status(200).json({
+                message:"Note created successfully",
+                note:newNote
+             });
+         }catch(error){
+            console.error("==============");
+            console.error("CREATE NOTE ERROR");
+            console.error(error),
+            console.error("================");
             res.status(500).json({
-                message: error.message
+                message:error.message
             });
-        }
+         }
     }
 );
 
@@ -45,14 +95,20 @@ router.get(
     "/notes",
     authMiddleware,
     async (req, res) => {
-        try {
-            const notes = await Note.find();
-
-            res.status(200).json(notes);
-
-        } catch (error) {
+        try{
+            const notes = await Note.find().select("-file.driveFileId").sort({ createdAt: -1 });
+             
+            res.status(200).json({
+                message:"Notes fetched successfully",
+                count: notes.length,
+                notes: notes
+            });
+        }catch(error){
+            console.error("GET ALL NOTES ERROR: ");
+            console.error(error);
             res.status(500).json({
-                message: error.message
+                message:"Failed to fetch notes",
+                error:error.message
             });
         }
     }
@@ -69,20 +125,33 @@ router.get(
     "/notes/:id",
     authMiddleware,
     async (req, res) => {
-        try {
-            const note = await Note.findById(req.params.id);
-
-            if (!note) {
-                return res.status(404).json({
-                    message: "Note not found"
+        try{
+             // check the object id format 
+             if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+                return res.status(400).json({
+                    message:"Invalid note ID"
                 });
-            }
+             }
+             //find note 
+             const note = await Note.findById(req.params.id);
 
-            res.status(200).json(note);
+             //Note doesnot exist
+             if(!note){
+                return res.status(404).json({
+                    message:"Note not found "
+                });
 
-        } catch (error) {
+             }
+             res.status(200).json({
+                message:"Note fetched successfully",
+                note:note
+             });
+        }catch(error){
+            console.error("GET SINGLE NOTE ERROR");
+            console.error(error);
             res.status(500).json({
-                message: error.message
+                message:"Failed to fetch note",
+                error:error.message
             });
         }
     }
