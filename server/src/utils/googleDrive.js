@@ -4,6 +4,7 @@
 const { google } = require("googleapis");
 const fs = require("fs");
 const path = require("path");
+const { request } = require("http");
 
 const credentialsPath = path.join(
     __dirname,
@@ -61,8 +62,18 @@ const uploadFile = async (file) => {
     return response.data;
 };
 
+const deleteFile = async(fileId) => {
+    
+    await drive.files.delete({
+        fileId:fileId
+    });
+
+    return true;
+}
+
 
 module.exports = {
     drive,
-    uploadFile
+    uploadFile,
+    deleteFile
 };
