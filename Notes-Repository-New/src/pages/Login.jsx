@@ -1,13 +1,15 @@
 import { useState } from "react";
 import Navbar from "../components/navbar";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 
 
 function Login() {
   const [email , setEmail] =useState("");
   const [password ,setPassword] =useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] =useState({});
 
+   const navigate = useNavigate();
 
   const validateForm  = ()=>{
     const newError = {};
@@ -30,14 +32,62 @@ function Login() {
     return Object.keys(newError).length === 0;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const isValid = validateForm();
     if(!isValid){
       return
     }
-    console.log("form is valid ");
+    try{
+      setLoading(true);
+      const response= await fetch(
+         "http://localhost:5000/api/auth/login",
+         {
+          method :"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+         }
+      );
+      const data = await response.json();
+      console.log("LOGIN RESPONSE:", data);
+      if(!response.ok){
+        setError({
+           general: data.message || "Login failed"
+        });
+        return
+      }
+      // store jwt token
+      localStorage.setItem("token",data.token);
+
+       // Store user information
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+       console.log("Login successful");
+      console.log("Token stored");
+
+      // Go to Notes page
+      navigate("/");
+    }catch (error) {
+
+      console.error("LOGIN ERROR:", error);
+
+      setError({
+        general: "Unable to connect to server"
+      });
+
+    } finally {
+
+      setLoading(false);
+
+    }
   };
 
   return (
@@ -56,6 +106,12 @@ function Login() {
           <p className="text-center text-gray-500 mt-2">
             Login to access your account
           </p>
+
+           {error.general && (
+            <p className="text-red-500 text-sm text-center mt-4">
+              {error.general}
+            </p>
+          )}
 
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="mt-8">
@@ -103,9 +159,10 @@ function Login() {
             {/* Login Button */}
             <button
               type="submit"
+              disabled={loading}
               className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
             >
-              Login
+               {loading ? "Logging in..." : "Login"}
             </button>
 
           </form>
