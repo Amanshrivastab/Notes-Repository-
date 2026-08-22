@@ -99,8 +99,40 @@ router.get(
     "/notes",
     authMiddleware,
     async (req, res) => {
+        const {search, subject, semester ,branch} = req.query;
+        const filter = {};
+        if(search){
+            const searchConditions=
+               [{
+                title:{
+                    $regex:search,
+                    $options:"i"
+                }   
+            },
+            {
+                description:{
+                     $regex: search,
+                     $options: "i"
+                }
+            },
+            {subject:{$regex: search, $options: "i"}},
+            {branch:{$regex: search, $options: "i"}}
+                    
+        ] ;// Search semester only if search is a valid number
+            if (!isNaN(search)) {
+                searchConditions.push({
+                    semester: Number(search)
+                });
+            }
+            filter.$or = searchConditions;
+         }
+         //semester  and subject filter
+         if (semester) {filter.semester = Number(semester);}
+         if (subject) {filter.subject = subject;};
+        
+        
         try{
-            const notes = await Note.find().select("-file.driveFileId").sort({ createdAt: -1 });
+            const notes = await Note.find(filter).select("-file.driveFileId").sort({ createdAt: -1 });
              
             res.status(200).json({
                 message:"Notes fetched successfully",
