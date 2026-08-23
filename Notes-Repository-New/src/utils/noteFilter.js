@@ -1,4 +1,5 @@
-export const filterNotes = (notes,
+export const filterNotes = (
+    notes,
     search,
     subject,
     branch,

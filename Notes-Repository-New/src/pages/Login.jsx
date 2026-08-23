@@ -3,6 +3,8 @@ import Navbar from "../components/navbar";
 import { Link, useNavigate } from "react-router-dom";
 
 import { loginUser } from "../utils/authApi";
+import useAuth from "../hooks/useAuth";
+
 
 
 function Login() {
@@ -14,6 +16,7 @@ function Login() {
     const [error, setError] = useState({});
 
     const navigate = useNavigate();
+    const {login} = useAuth();
 
     // FORM VALIDATION
     const validateForm = () => {
@@ -80,20 +83,8 @@ function Login() {
                 email,
                 password
             );
-            // ========================================
-            // STORE JWT TOKEN
-            // ========================================
-            localStorage.setItem(
-                "token",
-                data.token
-            );
-            // ========================================
-            // STORE USER INFORMATION
-            // =====================================
-            localStorage.setItem(
-                "user",
-                JSON.stringify(data.user)
-            );
+              // using the useAuth and Authcontext for storeing the token
+            login(data.user, data.token);
             console.log("Login successful");
             console.log("Token stored");
 

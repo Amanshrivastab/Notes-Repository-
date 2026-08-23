@@ -3,61 +3,24 @@ import HeroSection from "../components/HeroSection";
 import SearchBar from "../components/searchBar";
 import LatestNotes from "../components/LatestNotes";
 import FilterBar from "../components/FilterBar";
+import { useState } from "react";
 
-import { useEffect, useState } from "react";
-
-import { fetchNotes } from "../utils/notesApi";
+import useLatestNotes from "../hooks/useLatestNotes";
 import { filterNotes } from "../utils/noteFilter";
-
 
 const Home = () => {
 
-    const [notes, setNotes] = useState([]);
-
     const [search, setSearch] = useState("");
-
     const [subject, setSubject] = useState("");
+    const [level, setLevel] = useState("");       // "school" | "btech"
+    const [standard, setStandard] = useState(""); // class number (9-12) ya semester (1-8)
+    const [branch, setBranch] = useState("");      // branch (CSE/ECE/BT) ya stream (Science/Commerce/Arts)
 
-    const [semester, setSemester] = useState("");
-
-    const [branch, setBranch] = useState("");
-
-    const [loading, setLoading] = useState(true);
-
-    const [error, setError] = useState("");
-
-
-    // ========================================
-    // FETCH NOTES
-    // ========================================
-
-    useEffect(() => {
-
-        const loadNotes = async () => {
-
-            try {
-
-                const notesData = await fetchNotes();
-
-                setNotes(notesData);
-
-            } catch (err) {
-
-                console.error("HOME FETCH ERROR:", err);
-
-                setError(err.message);
-
-            } finally {
-
-                setLoading(false);
-
-            }
-        };
-
-        loadNotes();
-
-    }, []);
-
+    const {
+        notes,
+        loading,
+        error
+    } = useLatestNotes();
 
     // ========================================
     // FILTER NOTES
@@ -67,10 +30,9 @@ const Home = () => {
         notes,
         search,
         subject,
-        semester,
-        branch
+        branch,
+        standard   // ye function ke andar "semester" parameter mein jaata hai
     );
-
 
     return (
         <>
@@ -86,69 +48,40 @@ const Home = () => {
             <FilterBar
                 subject={subject}
                 setSubject={setSubject}
-                semester={semester}
-                setSemester={setSemester}
+                level={level}
+                setLevel={setLevel}
+                standard={standard}
+                setStandard={setStandard}
                 branch={branch}
                 setBranch={setBranch}
             />
 
-
             {/* Loading */}
-
             {loading && (
                 <div className="text-center py-10">
-                    <p className="text-gray-600">
-                        Loading latest notes...
-                    </p>
+                    <p className="text-gray-600">Loading latest notes...</p>
                 </div>
             )}
-
 
             {/* Error */}
-
             {!loading && error && (
                 <div className="text-center py-10">
-                    <p className="text-red-500">
-                        {error}
-                    </p>
+                    <p className="text-red-500">{error}</p>
                 </div>
             )}
 
-
             {/* Latest Notes */}
-
-            {!loading &&
-                !error &&
-                filteredNotes.length > 0 && (
-
-                    <LatestNotes
-                        notes={filteredNotes}
-                    />
-
-                )
-            }
-
+            {!loading && !error && filteredNotes.length > 0 && (
+                <LatestNotes notes={filteredNotes} />
+            )}
 
             {/* No Results */}
-
-            {!loading &&
-                !error &&
-                filteredNotes.length === 0 && (
-
-                    <div className="text-center px-2 py-10">
-
-                        <h2 className="text-xl font-semibold">
-                            No notes found
-                        </h2>
-
-                        <p className="text-gray-500 mt-2">
-                            Try a different search or filter.
-                        </p>
-
-                    </div>
-
-                )
-            }
+            {!loading && !error && filteredNotes.length === 0 && (
+                <div className="text-center px-2 py-10">
+                    <h2 className="text-xl font-semibold">No notes found</h2>
+                    <p className="text-gray-500 mt-2">Try a different search or filter.</p>
+                </div>
+            )}
 
         </>
     );

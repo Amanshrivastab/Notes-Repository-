@@ -129,6 +129,7 @@ router.get(
          //semester  and subject filter
          if (semester) {filter.semester = Number(semester);}
          if (subject) {filter.subject = subject;};
+         if (branch)  { filter.branch = branch; }  
         
         
         try{
@@ -145,6 +146,33 @@ router.get(
             res.status(500).json({
                 message:"Failed to fetch notes",
                 error:error.message
+            });
+        }
+    }
+);
+// ========================================
+// GET latest NOTES
+// GET /api/notes/latest
+// ========================================
+router.get(
+    "/notes/latest",
+    async (req, res) => {
+        try {
+            const notes = await Note.find()
+                .select("-file.driveFileId")
+                .sort({ createdAt: -1 });
+
+            res.status(200).json({
+                message: "Latest notes fetched successfully",
+                count: notes.length,
+                notes
+            });
+        } catch (error) {
+            console.error("GET LATEST NOTES ERROR:", error);
+
+            res.status(500).json({
+                message: "Failed to fetch latest notes",
+                error: error.message
             });
         }
     }
