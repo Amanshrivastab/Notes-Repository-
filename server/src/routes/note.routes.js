@@ -197,7 +197,7 @@ router.get(
                 });
              }
              //find note 
-             const note = await Note.findById(req.params.id);
+             const note = await Note.findById(req.params.id).select("-file.driveFileId");
 
              //Note doesnot exist
              if(!note){
