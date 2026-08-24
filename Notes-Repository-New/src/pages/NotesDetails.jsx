@@ -1,4 +1,4 @@
-import Navbar from "../components/navbar";
+
 import { Link, useParams } from "react-router-dom";
 import useOneNote from "../hooks/useOneNote";
 
@@ -14,7 +14,7 @@ function NotesDetails() {
     if (loading) {
         return (
             <>
-                <Navbar />
+               
 
                 <div className="max-w-4xl mx-auto px-5 py-10">
                     <p className="text-gray-600">
@@ -28,7 +28,7 @@ function NotesDetails() {
     if (error) {
         return (
             <>
-                <Navbar />
+                
 
                 <div className="max-w-4xl mx-auto px-5 py-10">
                     <h1 className="text-2xl font-bold text-red-500">
@@ -49,7 +49,7 @@ function NotesDetails() {
     if (!note) {
         return (
             <>
-                <Navbar />
+                
 
                 <div className="max-w-4xl mx-auto px-5 py-10">
                     <h1 className="text-2xl font-bold text-gray-700">
@@ -69,7 +69,7 @@ function NotesDetails() {
 
     return (
         <>
-            <Navbar />
+            
 
             <main className="max-w-4xl mx-auto px-5 py-8">
 
@@ -100,7 +100,7 @@ function NotesDetails() {
 
                         <div>
                             <h2 className="text-sm font-semibold text-gray-500">
-                                Semester
+                                Semester/Class
                             </h2>
 
                             <p className="text-lg text-gray-700">

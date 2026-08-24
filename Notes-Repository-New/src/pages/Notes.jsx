@@ -20,7 +20,7 @@ function Notes() {
 
     return (
         <>
-            <Navbar />
+           
 
             <section className="max-w-6xl mx-auto px-5 py-7">
 

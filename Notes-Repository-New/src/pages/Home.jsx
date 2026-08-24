@@ -36,7 +36,7 @@ const Home = () => {
 
     return (
         <>
-            <Navbar />
+           
 
             <HeroSection />
 

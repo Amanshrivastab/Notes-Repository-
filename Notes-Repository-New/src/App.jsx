@@ -1,4 +1,6 @@
 import { Routes,Route } from "react-router-dom";
+import ProtectedRoute from "./components/protechtedRoute";
+import AdminRoute from "./components/AdminRoute";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -6,9 +8,12 @@ import Notes from "./pages/Notes";
 import Dashboard from "./pages/Dashboard";
 import NotesDetails from "./pages/NotesDetails";
 import Register from "./pages/Register";
+import Navbar from "./components/navbar";
 
 function App(){
   return(
+    <>
+    <Navbar/>
     <Routes>
       <Route path="/" element={<Home/>}/> 
 
@@ -16,12 +21,21 @@ function App(){
 
       <Route path="/register" element={<Register/>}/>
 
+       <Route element={<ProtectedRoute />}>
+
       <Route path="/notes" element={<Notes/>}/>
 
       <Route path="/notes/:id" element={<NotesDetails />} />
+      </Route>
 
-      <Route path="/dashboard" element={<Dashboard/>}/>
+      <Route element={<AdminRoute />}>
+
+      <Route path="/admin" element={<Dashboard />}/>
+      
+      </Route>
+
     </Routes>
+    </>
   );
 }
 export default App;

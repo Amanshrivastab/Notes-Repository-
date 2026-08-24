@@ -1,35 +1,153 @@
-import { Link } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 function Navbar() {
+
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const navigate = useNavigate();
+
+  // ==============================
+  // LOGOUT
+  // ==============================
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+
+  // ==============================
+  // NAV LINK STYLE
+  // ==============================
+
+  const navClass = ({ isActive }) => {
+
+    return isActive
+      ? "bg-blue-900 text-white px-4 py-2 rounded-lg font-bold shadow-md"
+      : "text-gray-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-200 transition-all";
+  };
+
+
   return (
     <nav className="bg-white shadow-md px-8 py-4 flex justify-between items-center">
 
-      <h2 className="text-2xl font-bold text-blue-600">
+      {/* ==============================
+          LOGO
+      ============================== */}
+
+      <NavLink
+        to="/"
+        className="text-2xl font-bold text-blue-700"
+      >
         📚 Notes Repository
-      </h2>
+      </NavLink>
 
-      <div className="flex gap-6">
 
-        <Link
+      {/* ==============================
+          NAVIGATION
+      ============================== */}
+
+      <div className="flex gap-3 items-center">
+
+        {/* ==============================
+            HOME
+        ============================== */}
+
+        <NavLink
           to="/"
-          className="text-gray-700 hover:text-blue-600 transition-colors"
+          end
+          className={navClass}
         >
           Home
-        </Link>
+        </NavLink>
 
-        <Link
+
+        {/* ==============================
+            NOTES
+        ============================== */}
+
+        <NavLink
           to="/notes"
-          className="text-gray-700 hover:text-blue-600 transition-colors"
+          className={navClass}
         >
           Notes
-        </Link>
+        </NavLink>
 
-        <Link
-          to="/login"
-          className="text-gray-700 hover:text-blue-600 transition-colors"
-        >
-          Login
-        </Link>
+
+        {/* ==============================
+            NOT LOGGED IN
+        ============================== */}
+
+        {!isAuthenticated && (
+          <>
+
+            {/* LOGIN */}
+
+            <NavLink
+              to="/login"
+              className={navClass}
+            >
+              Login
+            </NavLink>
+
+
+            {/* REGISTER */}
+
+            <NavLink
+              to="/register"
+              className={navClass}
+            >
+              Register
+            </NavLink>
+
+          </>
+        )}
+
+
+        {/* ==============================
+            LOGGED IN
+        ============================== */}
+
+        {isAuthenticated && (
+          <>
+
+            {/* ==============================
+                ADMIN
+            ============================== */}
+
+            {user?.role === "admin" && (
+              <NavLink
+                to="/admin"
+                className={navClass}
+              >
+                Dashboard
+              </NavLink>
+            )}
+
+
+            {/* ==============================
+                USER NAME
+            ============================== */}
+
+            <span className="text-gray-800 font-medium px-2">
+              Hi, {user?.name}
+            </span>
+
+
+            {/* ==============================
+                LOGOUT
+            ============================== */}
+
+            <button
+              onClick={handleLogout}
+              className="text-red-700 font-medium px-4 py-2 rounded-lg hover:bg-red-100 transition-all"
+            >
+              Logout
+            </button>
+
+          </>
+        )}
 
       </div>
 

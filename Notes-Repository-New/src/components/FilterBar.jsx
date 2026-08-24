@@ -17,6 +17,11 @@ const FilterBar = ({
         <option value="Computer Science">Computer Science</option>
         <option value="Electronics">Electronics</option>
         <option value="Biotechnology">Biotechnology</option>
+        <option value="AIML">AIML</option>
+        <option value="Physics">Physics</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Biology">Biology</option>
+        <option value="Mathematics">Mathematics</option>
       </select>
 
       {/* 2. Level filter: School vs B.Tech */}
@@ -62,6 +67,8 @@ const FilterBar = ({
           <option value="CSE">CSE</option>
           <option value="ECE">ECE</option>
           <option value="BT">Biotechnology</option>
+          <option value="ME">Mechenical</option>
+          <option value="AR">Robotics</option>
         </select>
       )}
 
