@@ -227,125 +227,160 @@ router.get(
 // PUT /api/notes/:id
 // Admin only
 // ========================================
-
 router.put(
     "/notes/:id",
     authMiddleware,
     adminMiddleware,
     upload.single("file"),
     async (req, res) => {
-       try{
-        if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-            return res.status(400).json({
-                message:" Invalalid Note Id "
-            });
-        }
+        try {
 
-        const note = await Note.findById(req.params.id);
-        if(!note){
-            return res.status(404).json({
-                message:"Note Not Found"
-            });
-        }
-        const {
-          title,
-          description,
-          subject,
-          semester,
-          branch
-        } = req.body || {};
+            // ========================================
+            // 1. Validate Note ID
+            // ========================================
 
-        if (title !== undefined) {
-            note.title = title;
-        }
-
-        if (description !== undefined) {
-          note.description = description;
-        }
-
-        if (subject !== undefined) {
-            note.subject = subject;
-        }
-
-        if (semester !== undefined) {
-            note.semester = semester;
-        }
-
-        if (branch !== undefined) {
-              note.branch = branch;
-        }
-
-        // update for file 
-        if(req.file){
-            const oldDriveFileId = await note.file?.driveFileId;
-           
-
-            console.log("================================");
-            console.log("OLD DRIVE FILE ID:");
-            console.log(oldDriveFileId);
-            console.log("================================");
-
-            const newFile = await uploadFile(req.file);
-            console.log("================================");
-            console.log("NEW DRIVE FILE ID:");
-            console.log(newFile.id);
-            console.log("================================");
-
-            if(!newFile || !newFile.id){
-                return res.status(500).json({
-                    message:"New file upload fail"
+            if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+                return res.status(400).json({
+                    message: "Invalid Note ID"
                 });
             }
-            // update mongodb wih nw file data 
-            note.file = {
-                driveFileId: newFile.id,
-                originalName: req.file.originalname,
-                mimeType:req.file.mimetype,
-                size:req.file.size
+
+            // ========================================
+            // 2. Find Note
+            // ========================================
+
+            const note = await Note.findById(req.params.id);
+
+            if (!note) {
+                return res.status(404).json({
+                    message: "Note Not Found"
+                });
             }
 
-            await note.save();
-            //delete old drive file 
-            if(oldDriveFileId){
-                try{
-                    await deleteFile(oldDriveFileId); 
-                    console.log("================================");
-                    console.log("OLD FILE DELETED:");
-                    console.log(oldDriveFileId);
-                    console.log("================================");  
-                }catch(deleteError){
-                    console.error("OLD DRIVE FILE DELETE ERROR:");
-                    console.error(deleteError);
+            // ========================================
+            // 3. Get Metadata
+            // ========================================
+
+            const {
+                title,
+                description,
+                subject,
+                semester,
+                branch
+            } = req.body || {};
+
+            // ========================================
+            // 4. Update Metadata
+            // ========================================
+
+            if (title !== undefined) {
+                note.title = title;
+            }
+
+            if (description !== undefined) {
+                note.description = description;
+            }
+
+            if (subject !== undefined) {
+                note.subject = subject;
+            }
+
+            if (semester !== undefined) {
+                note.semester = semester;
+            }
+
+            if (branch !== undefined) {
+                note.branch = branch;
+            }
+
+            // ========================================
+            // 5. Replace File
+            // ========================================
+
+            if (req.file) {
+
+                const oldDriveFileId =
+                    note.file?.driveFileId;
+
+                console.log("OLD DRIVE FILE ID:");
+                console.log(oldDriveFileId);
+
+                // Upload new file
+                const newFile =
+                    await uploadFile(req.file);
+
+                // Check upload
+                if (!newFile || !newFile.id) {
+                    return res.status(500).json({
+                        message: "New file upload failed"
+                    });
                 }
+
+                console.log("NEW DRIVE FILE ID:");
+                console.log(newFile.id);
+
+                // Update MongoDB
+                note.file = {
+                    driveFileId: newFile.id,
+                    originalName: req.file.originalname,
+                    mimeType: req.file.mimetype,
+                    size: req.file.size
+                };
+
+                await note.save();
+
+                // Delete old Drive file
+                if (oldDriveFileId) {
+                    try {
+                        await deleteFile(oldDriveFileId);
+
+                        console.log(
+                            "OLD DRIVE FILE DELETED:",
+                            oldDriveFileId
+                        );
+
+                    } catch (deleteError) {
+
+                        console.error(
+                            "OLD DRIVE FILE DELETE ERROR:",
+                            deleteError
+                        );
+                    }
+                }
+
+            } else {
+
+                // ========================================
+                // No New File
+                // Only Save Metadata
+                // ========================================
+
+                await note.save();
             }
-        }else{
 
-             // 4. Save changes to MongoDB
-            await note.save();
+            // ========================================
+            // 6. Response
+            // ========================================
 
-
-        }
-        
-            // 5. Send updated note
-            res.status(200).json({
-                message: "Note metadata updated successfully",
-                note: note
+            return res.status(200).json({
+                message: "Note updated successfully",
+                note
             });
 
-       }catch (error) {
+        } catch (error) {
 
-            console.error("UPDATE NOTE ERROR:");
-            console.error(error);
+            console.error(
+                "UPDATE NOTE ERROR:",
+                error
+            );
 
-            res.status(500).json({
+            return res.status(500).json({
                 message: "Failed to update note",
                 error: error.message
             });
         }
     }
 );
-
-
 // ========================================
 // DELETE NOTE   by using mongodb note id 
 // DELETE /api/notes/:id

@@ -94,11 +94,11 @@ function Dashboard() {
                                     </th>
 
                                     <th className="text-left p-3">
-                                        Semester
+                                        Semester/class
                                     </th>
 
                                     <th className="text-left p-3">
-                                        Branch
+                                        Branch/stream
                                     </th>
 
                                     <th className="text-left p-3">

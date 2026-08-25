@@ -77,3 +77,37 @@ export const fetchNoteById = async (id) => {
 
     return data.note;
 };
+// ========================================
+// UPDATE NOTE API
+// PUT /api/notes/:id
+// ========================================
+ export const updateNote = async(id,formData) =>{
+    const token = localStorage.getItem("token");
+
+    if(!token){
+        throw new error(
+            "Pleasse login frist"
+        );
+    };
+
+    const response = await fetch(
+        `http://localhost:5000/api/notes/${id}`,
+        {
+            method:"PUT",
+            headers:{
+                Authorization:`Bearer ${token}`,
+            },
+            body:formData,
+        }
+    );
+
+    const data = await response.json();
+
+    console.log("UPDATE NOTE API",data)
+    if(!response.ok){
+        throw new error(
+            error.message||"Failed to update note"
+        );
+    }
+    return data.note;
+} 

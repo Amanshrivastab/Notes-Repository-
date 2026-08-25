@@ -22,10 +22,13 @@ const useOneNote = (id) => {
                 setLoading(false);
             }
         };
-
-        if (id) {
-            loadNote();
-        }
+        if (!id) {
+            setError("Invalid note ID");
+            setLoading(false);
+            return;
+        } 
+        loadNote();
+        
     }, [id]);
 
     return {
