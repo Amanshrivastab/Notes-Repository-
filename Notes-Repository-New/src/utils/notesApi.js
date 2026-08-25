@@ -146,3 +146,39 @@ export const uploadNote =async (formData)=>{
     return data.note;
 
 };
+
+
+// ========================================
+// DELETE NOTE API
+// DELETE /api/notes/:id
+// ========================================
+
+export const deleteNote = async (id) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        throw new Error("Please login first");
+    }
+
+    const response = await fetch(
+        `http://localhost:5000/api/notes/${id}`,
+        {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    const data = await response.json();
+
+    console.log("DELETE NOTE API:", data);
+
+    if (!response.ok) {
+        throw new Error(
+            data.message || "Failed to delete note"
+        );
+    }
+
+    return data;
+};

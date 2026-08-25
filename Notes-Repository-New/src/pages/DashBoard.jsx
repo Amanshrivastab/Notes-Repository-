@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchNotes } from "../utils/notesApi";
+import useDeleteNote from "../hooks/useDeleteNote";
 
 function Dashboard() {
     const [notes, setNotes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [deletingId, setDeletingId] = useState(null);
+    const {
+        remove,
+        loading: deleteLoading,
+        error: deleteError,
+        } = useDeleteNote();
 
     useEffect(() => {
         const loadNotes = async () => {
@@ -28,6 +35,37 @@ function Dashboard() {
 
         loadNotes();
     }, []);
+
+     const handleDelete = async (id) => {
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this note?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            setDeletingId(id);
+
+            await remove(id);
+
+            setNotes((prevNotes) =>
+                prevNotes.filter(
+                    (note) => note._id !== id
+                )
+         );
+
+        } catch (error) {
+            console.error(
+                "DASHBOARD DELETE ERROR:",
+                error
+            );
+        } finally {
+            setDeletingId(null);
+        }
+    };
+
 
     return (
         <>
@@ -139,9 +177,13 @@ function Dashboard() {
                                             </Link>
 
                                             <button
+                                                 onClick={() => handleDelete(note._id)}
+                                                disabled={deletingId === note._id}
                                                 className="bg-red-600 text-white px-3 py-1 rounded"
                                             >
-                                                Delete
+                                                 {deletingId === note._id
+                                                    ? "Deleting..."
+                                                    : "Delete"}
                                             </button>
 
                                         </td>

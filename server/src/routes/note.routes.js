@@ -426,7 +426,7 @@ router.delete(
         }catch(error){
             console.error(" NOTE DELETE ERROR");
             console.error(error);
-            res.status.json({
+            res.status(500).json({
                 message:"Failed to Delete ",
                 error:error.message 
             });
