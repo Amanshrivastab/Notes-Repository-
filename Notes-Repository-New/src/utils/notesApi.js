@@ -111,3 +111,38 @@ export const fetchNoteById = async (id) => {
     }
     return data.note;
 } 
+
+// ========================================
+// UPLOAD NOTE API
+// POST /api/notes
+// ========================================
+
+export const uploadNote =async (formData)=>{
+    const token = localStorage.getItem("token");
+
+    if(!token){
+        throw new error(" Please login frist ");
+    };
+
+    const response = await fetch(
+        "http://localhost:5000/api/notes",
+        {
+            method:"POST",
+            headers:{
+                Authorization:`Bearer ${token}`,
+            },
+            body:formData,
+        },
+    );
+
+    const data = await response.json();
+    console.log("upload note api",data);
+
+    if(!response.ok){
+        throw new error(
+            error.message||"failed to upload error "
+        );
+    };
+    return data.note;
+
+};

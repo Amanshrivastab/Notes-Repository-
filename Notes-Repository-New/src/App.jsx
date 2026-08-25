@@ -10,6 +10,7 @@ import NotesDetails from "./pages/NotesDetails";
 import Register from "./pages/Register";
 import Navbar from "./components/navBar";
 import EditNote from "./pages/EditNote";
+import UploadNote from "./pages/UploadNote";
 
 function App(){
   return(
@@ -34,6 +35,8 @@ function App(){
       <Route path="/dashboard" element={<Dashboard />}/>
 
       <Route path="/dashboard/edit/:id" element={<EditNote />} />
+
+      <Route path="/dashboard/upload" element={<UploadNote />} />
       
       </Route>
 
