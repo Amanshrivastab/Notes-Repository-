@@ -118,7 +118,7 @@ function Navbar() {
 
             {user?.role === "admin" && (
               <NavLink
-                to="/admin"
+                to="/Dashboard"
                 className={navClass}
               >
                 Dashboard

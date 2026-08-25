@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Navbar from "../components/navbar";
 import NoteCard from "../components/noteCard";
 import SearchBar from "../components/searchBar";
 import FilterBar from "../components/FilterBar";

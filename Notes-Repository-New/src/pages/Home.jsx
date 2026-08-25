@@ -1,4 +1,4 @@
-import Navbar from "../components/navbar";
+
 import HeroSection from "../components/HeroSection";
 import SearchBar from "../components/searchBar";
 import LatestNotes from "../components/LatestNotes";
