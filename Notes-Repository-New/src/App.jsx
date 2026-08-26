@@ -12,6 +12,7 @@ import Navbar from "./components/navBar";
 import EditNote from "./pages/EditNote";
 import UploadNote from "./pages/UploadNote";
 
+
 function App(){
   return(
     <>

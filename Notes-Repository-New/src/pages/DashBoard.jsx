@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchNotes } from "../utils/notesApi";
 import useDeleteNote from "../hooks/useDeleteNote";
+import StudentList from "../components/StudentList";
 
 function Dashboard() {
     const [notes, setNotes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [deletingId, setDeletingId] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [noteToDelete, setNoteToDelete] = useState(null);
+
     const {
         remove,
         loading: deleteLoading,
@@ -37,14 +41,6 @@ function Dashboard() {
     }, []);
 
      const handleDelete = async (id) => {
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this note?"
-        );
-
-        if (!confirmed) {
-            return;
-        }
-
         try {
             setDeletingId(id);
 
@@ -54,18 +50,25 @@ function Dashboard() {
                 prevNotes.filter(
                     (note) => note._id !== id
                 )
-         );
-
-        } catch (error) {
-            console.error(
-                "DASHBOARD DELETE ERROR:",
-                error
             );
-        } finally {
-            setDeletingId(null);
-        }
-    };
 
+            setShowDeleteModal(false);
+            setNoteToDelete(null);
+
+            } catch (error) {
+                console.error(
+                    "DASHBOARD DELETE ERROR:",
+                    error
+            );
+            } finally {
+                setDeletingId(null);
+            }
+        };
+
+        const cancelDelete = () => {
+            setShowDeleteModal(false);
+            setNoteToDelete(null);
+        };
 
     return (
         <>
@@ -177,7 +180,10 @@ function Dashboard() {
                                             </Link>
 
                                             <button
-                                                 onClick={() => handleDelete(note._id)}
+                                                 onClick={() =>{
+                                                     setNoteToDelete(note);
+                                                     setShowDeleteModal(true);
+                                                 }}
                                                 disabled={deletingId === note._id}
                                                 className="bg-red-600 text-white px-3 py-1 rounded"
                                             >
@@ -194,6 +200,69 @@ function Dashboard() {
                         </table>
                     </div>
                 )}
+
+                <StudentList/>
+                {showDeleteModal && (
+                     <div className=" fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4
+                ">
+
+                 <div className=" w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl
+                    ">
+
+                  {/* Modal heading */}
+                 <h2 className=" text-xl font-bold text-gray-800 ">
+                              Delete Note?
+                 </h2>
+
+
+            {/* Message */}
+            <p className=" mt-3 text-gray-600 leading-relaxed ">
+                Are you sure you want to delete{" "}
+                <span className="font-semibold text-gray-800">
+                    {noteToDelete?.title}
+                </span>
+                ?
+            </p>
+
+
+            <p className=" mt-2 text-sm text-red-500 ">
+                This action cannot be undone.
+            </p>
+
+
+            {/* Buttons */}
+            <div className=" mt-6 flex justify-end gap-3 ">
+
+                {/* Cancel */}
+                <button
+                    onClick={cancelDelete}
+                    disabled={deletingId !== null}
+                    className=" px-5 py-2.5 rounded-lg bg-gray-100 text-gray-700 font-medium
+                        hover:bg-gray-200 transition disabled:opacity-50 " >
+                    Cancel
+                </button>
+
+
+                {/* Confirm Delete */}
+                <button
+                    onClick={() =>
+                        handleDelete(noteToDelete._id)
+                    }
+                    disabled={deletingId !== null}
+                    className="
+                        px-5 py-2.5 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700
+                        transition disabled:bg-red-400 disabled:cursor-not-allowed " >
+                    {deletingId !== null
+                        ? "Deleting..."
+                        : "Confirm Delete"}
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+)}
 
             </div>
         </>
