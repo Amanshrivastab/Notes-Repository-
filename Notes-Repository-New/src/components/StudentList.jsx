@@ -355,7 +355,7 @@ const cancelDelete = () => {
                                                     transition
                                                 "
                                             >
-                                                 {deleting ? "Deleting..." : "Confirm Delete"}
+                                                 {deleting ? "Deleting..." : " Delete"}
                                             </button>
 
                                         </td>
@@ -427,7 +427,7 @@ const cancelDelete = () => {
                         px-5 py-2.5 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition
                     "
                 >
-                    Confirm Delete
+                    Confrim Delete
                 </button>
 
             </div>
