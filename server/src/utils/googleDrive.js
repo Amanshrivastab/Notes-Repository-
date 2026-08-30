@@ -1,48 +1,31 @@
 
-
-
 const { google } = require("googleapis");
-const fs = require("fs");
-const path = require("path");
-const { request } = require("http");
+const { Readable } = require("stream");
 
-const credentialsPath = path.join(
-    __dirname,
-    "../credentials",
-    "OAuth-service-account.json"
-);
+// ==================== CREATE OAUTH CLIENT ====================
 
-// Read OAuth credentials
-const credentials = JSON.parse(
-    fs.readFileSync(credentialsPath, "utf-8")
-);
-
-const {
-    client_id,
-    client_secret,
-    redirect_uris
-} = credentials.web;
-
-// Create OAuth2 client
 const oauth2Client = new google.auth.OAuth2(
-    client_id,
-    client_secret,
-    redirect_uris[0]
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URI
 );
 
-// Add refresh token
+// ==================== ADD REFRESH TOKEN ====================
+
 oauth2Client.setCredentials({
     refresh_token: process.env.GOOGLE_REFRESH_TOKEN
 });
 
-// Create Google Drive client
+// ==================== CREATE GOOGLE DRIVE CLIENT ====================
+
 const drive = google.drive({
     version: "v3",
     auth: oauth2Client
 });
 
 
-// Upload file to Google Drive
+// ==================== UPLOAD FILE ====================
+
 const uploadFile = async (file) => {
 
     const response = await drive.files.create({
@@ -53,7 +36,7 @@ const uploadFile = async (file) => {
 
         media: {
             mimeType: file.mimetype,
-            body: require("stream").Readable.from(file.buffer)
+            body: Readable.from(file.buffer)
         },
 
         fields: "id, name, mimeType, size, webViewLink"
@@ -62,14 +45,17 @@ const uploadFile = async (file) => {
     return response.data;
 };
 
-const deleteFile = async(fileId) => {
-    
+
+// ==================== DELETE FILE ====================
+
+const deleteFile = async (fileId) => {
+
     await drive.files.delete({
-        fileId:fileId
+        fileId: fileId
     });
 
     return true;
-}
+};
 
 
 module.exports = {
@@ -77,3 +63,4 @@ module.exports = {
     uploadFile,
     deleteFile
 };
+
