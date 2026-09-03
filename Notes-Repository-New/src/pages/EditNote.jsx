@@ -276,7 +276,7 @@ function EditNote() {
                     />
                 </div>
 
-                {/* SEMESTER */}
+                
 
                 <div>
                     <label className="block font-medium mb-2">
