@@ -32,7 +32,7 @@ export const fetchNotes = async () => {
 export const fetchLatestNotes = async () => {
 
     const response = await fetch(
-        `${API_URL}/api/notes/latest`,
+        `${API_URL}/notes/latest`,
         {
             method: "GET",
         }
