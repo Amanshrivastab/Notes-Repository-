@@ -2,7 +2,7 @@ import API_URL from "../services/api";
 
 export const loginUser = async (email, password) => {
     const response = await fetch(
-        `${API_URL}/auth/login`,
+        `${API_URL}/api/auth/login`,
         {
             method: "POST",
             headers: {
@@ -30,7 +30,7 @@ export const loginUser = async (email, password) => {
 
 export const registerUser = async (name, email, password) => {
     const response = await fetch(
-        `${API_URL}/auth/register`,
+        `${API_URL}/api/auth/register`,
         {
             method: "POST",
             headers: {

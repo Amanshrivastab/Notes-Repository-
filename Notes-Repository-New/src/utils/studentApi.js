@@ -8,7 +8,7 @@ export const fetchStudents = async () => {
     }
 
     const response = await fetch(
-        `${API_URL}/student`,
+        `${API_URL}/api/student`,
         {
             method: "GET",
             headers: {
@@ -37,7 +37,7 @@ export const fetchStudentByEmail = async (email) => {
     }
 
     const response = await fetch(
-        `${API_URL}/student/email/${encodeURIComponent(email)}`,
+        `${API_URL}/api/student/email/${encodeURIComponent(email)}`,
         {
             method: "GET",
             headers: {
@@ -66,7 +66,7 @@ export const deleteStudent = async (id) => {
     }
 
     const response = await fetch(
-        `${API_URL}/student/${id}`,
+        `${API_URL}/api/student/${id}`,
         {
             method: "DELETE",
             headers: {

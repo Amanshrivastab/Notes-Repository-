@@ -8,7 +8,7 @@ const fetchNoteFile = async (id) => {
     }
 
     const response = await fetch(
-        `${API_URL}/notes/${id}/file`,
+        `${API_URL}/api/notes/${id}/file`,
         {
             method: "GET",
             headers: {

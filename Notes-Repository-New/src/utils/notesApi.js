@@ -8,7 +8,7 @@ export const fetchNotes = async () => {
     }
 
     const response = await fetch(
-        `${API_URL}/notes`,
+        `${API_URL}/api/notes`,
         {
             method: "GET",
             headers: {
@@ -58,7 +58,7 @@ export const fetchNoteById = async (id) => {
     }
 
     const response = await fetch(
-        `${API_URL}/notes/${id}`,
+        `${API_URL}/api/notes/${id}`,
         {
             method: "GET",
             headers: {
@@ -93,7 +93,7 @@ export const fetchNoteById = async (id) => {
     };
 
     const response = await fetch(
-        `${API_URL}/notes/${id}`,
+        `${API_URL}/api/notes/${id}`,
         {
             method:"PUT",
             headers:{
@@ -127,7 +127,7 @@ export const uploadNote =async (formData)=>{
     };
 
     const response = await fetch(
-        `${API_URL}/notes`,
+        `${API_URL}/api/notes`,
         {
             method:"POST",
             headers:{
@@ -163,7 +163,7 @@ export const deleteNote = async (id) => {
     }
 
     const response = await fetch(
-        `${API_URL}/notes/${id}`,
+        `${API_URL}/api/notes/${id}`,
         {
             method: "DELETE",
             headers: {
