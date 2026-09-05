@@ -1,3 +1,5 @@
+import API_URL from "../services/api";
+
 export const fetchNotes = async () => {
     const token = localStorage.getItem("token");
 
@@ -6,7 +8,7 @@ export const fetchNotes = async () => {
     }
 
     const response = await fetch(
-        "http://localhost:5000/api/notes",
+        `${API_URL}/api/notes`,
         {
             method: "GET",
             headers: {
@@ -30,7 +32,7 @@ export const fetchNotes = async () => {
 export const fetchLatestNotes = async () => {
 
     const response = await fetch(
-        "http://localhost:5000/api/notes/latest",
+        `${API_URL}/api/notes/latest`,
         {
             method: "GET",
         }
@@ -56,7 +58,7 @@ export const fetchNoteById = async (id) => {
     }
 
     const response = await fetch(
-        `http://localhost:5000/api/notes/${id}`,
+        `${API_URL}/api/notes/${id}`,
         {
             method: "GET",
             headers: {
@@ -91,7 +93,7 @@ export const fetchNoteById = async (id) => {
     };
 
     const response = await fetch(
-        `http://localhost:5000/api/notes/${id}`,
+        `${API_URL}/api/notes/${id}`,
         {
             method:"PUT",
             headers:{
@@ -125,7 +127,7 @@ export const uploadNote =async (formData)=>{
     };
 
     const response = await fetch(
-        "http://localhost:5000/api/notes",
+        `${API_URL}/api/notes`,
         {
             method:"POST",
             headers:{
@@ -161,7 +163,7 @@ export const deleteNote = async (id) => {
     }
 
     const response = await fetch(
-        `http://localhost:5000/api/notes/${id}`,
+        `${API_URL}/api/notes/${id}`,
         {
             method: "DELETE",
             headers: {

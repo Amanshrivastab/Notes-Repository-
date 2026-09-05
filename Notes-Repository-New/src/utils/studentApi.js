@@ -1,3 +1,5 @@
+import API_URL from "../services/api";
+
 export const fetchStudents = async () => {
     const token = localStorage.getItem("token");
 
@@ -6,7 +8,7 @@ export const fetchStudents = async () => {
     }
 
     const response = await fetch(
-        "http://localhost:5000/api/student",
+        `${API_URL}/api/student`,
         {
             method: "GET",
             headers: {
@@ -35,7 +37,7 @@ export const fetchStudentByEmail = async (email) => {
     }
 
     const response = await fetch(
-        `http://localhost:5000/api/student/email/${encodeURIComponent(email)}`,
+        `${API_URL}/api/student/email/${encodeURIComponent(email)}`,
         {
             method: "GET",
             headers: {
@@ -64,7 +66,7 @@ export const deleteStudent = async (id) => {
     }
 
     const response = await fetch(
-        `http://localhost:5000/api/student/${id}`,
+        `${API_URL}/api/student/${id}`,
         {
             method: "DELETE",
             headers: {

@@ -1,6 +1,8 @@
+import API_URL from "../services/api";
+
 export const loginUser = async (email, password) => {
     const response = await fetch(
-        "http://localhost:5000/api/auth/login",
+        `${API_URL}/api/auth/login`,
         {
             method: "POST",
             headers: {
@@ -28,7 +30,7 @@ export const loginUser = async (email, password) => {
 
 export const registerUser = async (name, email, password) => {
     const response = await fetch(
-        "http://localhost:5000/api/auth/register",
+        `${API_URL}/api/auth/register`,
         {
             method: "POST",
             headers: {
